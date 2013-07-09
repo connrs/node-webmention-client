@@ -1,0 +1,25 @@
+{
+  "name": "webmention-client",
+  "version": "0.0.1",
+  "description": "A client to ping webmention servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/tape/bin/tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/connrs/node-webmention-client.git"
+  },
+  "keywords": [
+    "webmention"
+  ],
+  "author": "connrs",
+  "license": "BSD-3",
+  "devDependencies": {
+    "tape": "~1.0.4"
+  },
+  "dependencies": {
+    "request": "~2.22.0",
+    "lookup-webmention-server": "0.0.1"
+  }
+}
