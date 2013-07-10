@@ -1,5 +1,5 @@
 var request = require('request');
-var matchWebmentionServer = require('./lib/match-webmention-server.js');
+var getServerUrl = require('./lib/get-server-url');
 
 function LookupWebmentionServer() {}
 
@@ -18,22 +18,13 @@ LookupWebmentionServer.prototype.lookup = function () {
 LookupWebmentionServer.prototype._httpResponse = function (err, response, body) {
   if (err) {
     this._callback(err);
-    return;
   }
-
-  if (this._targetResponseIsError(response)) {
+  else if (this._targetResponseIsError(response)) {
     this._callback();
-    return;
   }
-
-  var serverUrl = this._getWebmentionServerUrl(this._getLinkHeaders(response.headers));
-
-  if (!serverUrl) {
-    this._callback();
-    return;
+  else {
+    getServerUrl(this._getLinkHeaders(response.headers), body, this._onGetServerUrl.bind(this));
   }
-
-  this._callback(null, serverUrl);
 };
 
 LookupWebmentionServer.prototype._targetResponseIsError = function (response) {
@@ -60,25 +51,17 @@ LookupWebmentionServer.prototype._getLinkHeaders = function (headers) {
   return linkHeaders;
 };
 
-LookupWebmentionServer.prototype._getWebmentionServerUrl = function (linkHeaders) {
-  var linkHeader = linkHeaders.filter(filterWebmentionServers).map(mapWebmentionServers)[0];
-
-  return linkHeader;
-};
-
-function filterWebmentionServers(header) {
-  var match = matchWebmentionServer(header);
-
-  return match.length === 2;
-}
-
-function mapWebmentionServers(header) {
-  var match = matchWebmentionServer(header);
-
-  if (match.length === 2) {
-    return match[1];
+LookupWebmentionServer.prototype._onGetServerUrl = function (err, serverUrl) {
+  if (err) {
+    this._callback(err);
   }
-}
+  else if (!serverUrl) {
+    this._callback();
+  }
+  else {
+    this._callback(null, serverUrl);
+  }
+};
 
 function lookup(target, callback) {
   var lookupServer = new LookupWebmentionServer();

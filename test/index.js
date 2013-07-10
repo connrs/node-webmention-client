@@ -14,6 +14,7 @@ test('no WebMention server is found', function (t) {
 
   webmention(source, target, function (err, response) {
     server.close();
+    console.log(err);
     t.notOk(response.success);
     t.end();
   });

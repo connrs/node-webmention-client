@@ -1,6 +1,6 @@
 {
   "name": "webmention-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A client to ping webmention servers",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,6 @@
   },
   "dependencies": {
     "request": "~2.22.0",
-    "lookup-webmention-server": "0.0.1"
+    "lookup-webmention-server": "0.1.1"
   }
 }
